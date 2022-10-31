@@ -75,109 +75,105 @@ static Enum::AffectType::Value EnumAffectType(TCHAR* option)
 
 char timerTxt[12];
 char scoreTxt[12];
-std::vector<PROPGRIDITEM> LevelInstance::getProperties()
-{
-	std::vector<PROPGRIDITEM> properties = Instance::getProperties();
 
-
-
-	properties.push_back(createPGI("Messages",
+PROPERTIES_START(LevelInstance, Instance)
+	
+	DECLARE_STRING_PROPERTY(
+		"Messages",
 		"WinMessage",
 		"The message that shows when the player wins.",
-		(LPARAM)winMessage.c_str(),
-		PIT_EDIT));
-
-	properties.push_back(createPGI("Messages",
+		winMessage.c_str()
+	);
+	
+	DECLARE_STRING_PROPERTY(
+		"Messages",
 		"LoseMessage",
 		"The message that shows when the player loses.",
-		(LPARAM)loseMessage.c_str(),
-		PIT_EDIT));
-
-	properties.push_back(createPGI(
+		loseMessage.c_str()
+	);
+	
+	DECLARE_BOOL_PROPERTY( // unused?
 		"Gameplay",
 		"HighScoreIsGood",
 		"Some temporary string here",
-		(LPARAM)HighScoreIsGood,
-		PIT_CHECK
-		));
-
-	properties.push_back(createPGI(
+		HighScoreIsGood
+	);
+	
+	DECLARE_BOOL_PROPERTY( // unused?
 		"Gameplay",
 		"RunOnOpen",
 		"Some temporary string here",
-		(LPARAM)RunOnOpen,
-		PIT_CHECK
-		));
+		RunOnOpen
+	);
 
 	sprintf_s(timerTxt, "%g", timer);
 	sprintf_s(scoreTxt, "%d", score);
-	properties.push_back(createPGI("Gameplay",
+	
+	DECLARE_STRING_PROPERTY(
+		"Gameplay",
 		"InitialTimerValue",
 		"The amount of time in seconds the player has to complete this level.\r\n\r\nPut 0 if time is limitless.",
-		(LPARAM)timerTxt,
-		PIT_EDIT));
-
-	properties.push_back(createPGI("Gameplay",
+		timerTxt
+	);
+	
+	DECLARE_STRING_PROPERTY(
+		"Gameplay",
 		"InitialScoreValue",
 		"The amount of points the player starts with.",
-		(LPARAM)scoreTxt,
-		PIT_EDIT));
-
-	properties.push_back(createPGI("Gameplay",
+		scoreTxt
+	);
+	
+	DECLARE_ENUM_PROPERTY(
+		"Gameplay",
 		"TimerUpAction",
 		"Some temporary string here",
-		(LPARAM)strActionType(TimerUpAction),
-		PIT_COMBO,
-		TEXT("Nothing\0Pause\0Lose\0Draw\0Win\0")
-		));
-
-	properties.push_back(createPGI("Gameplay",
+		strActionType(TimerUpAction),
+		"Nothing\0Pause\0Lose\0Draw\0Win\0"
+	);
+	
+	DECLARE_ENUM_PROPERTY(
+		"Gameplay",
 		"TimerAffectsScore",
 		"Some temporary string here",
-		(LPARAM)strAffectType(TimerAffectsScore),
-		PIT_COMBO,
-		TEXT("NoChange\0Increase\0Decrease\0")
-		));
-	return properties;
-}
+		strAffectType(TimerAffectsScore),
+		"NoChange\0Increase\0Decrease\0"
+	);
 
-void LevelInstance::PropUpdate(LPPROPGRIDITEM &pItem)
-{
-	if(strcmp(pItem->lpszPropName, "InitialTimerValue") == 0)
-	{
-		timer = atoi((LPSTR)pItem->lpCurValue);
-	}
-	if(strcmp(pItem->lpszPropName, "InitialScoreValue") == 0)
-	{
-		score = atof((LPSTR)pItem->lpCurValue);
-	}
-	if(strcmp(pItem->lpszPropName, "LoseMessage") == 0)
-	{
-		loseMessage = (LPSTR)pItem->lpCurValue;
-	}
-	if(strcmp(pItem->lpszPropName, "WinMessage") == 0)
-	{
-		winMessage = (LPSTR)pItem->lpCurValue;
-	}
-	else if(strcmp(pItem->lpszPropName, "TimerUpAction") == 0)
-	{
-		TimerUpAction = EnumActionType((TCHAR*)pItem->lpCurValue);
-	}
-	else if(strcmp(pItem->lpszPropName, "TimerAffectsScore") == 0)
-	{
-		TimerAffectsScore = EnumAffectType((TCHAR*)pItem->lpCurValue);
-	}
-	else if(strcmp(pItem->lpszPropName, "HighScoreIsGood") == 0)
-	{
-		HighScoreIsGood = pItem->lpCurValue == TRUE;
-	}
-	else if(strcmp(pItem->lpszPropName, "RunOnOpen") == 0)
-	{
-		RunOnOpen = pItem->lpCurValue == TRUE;
-	}
-	else
-		Instance::PropUpdate(pItem);
-}
+PROPERTIES_END()
+
+PROP_UPDATE_START(LevelInstance)
+	DECLARE_PROP_UPDATE("InitialTimerValue")
+		timer = atoi(GET_STRING_CONST());
+	DECLARE_PROP_UPDATE_END() // InitialTimerValue
+	
+	DECLARE_PROP_UPDATE("InitialScoreValue")
+		score = atof(GET_STRING_CONST());
+	DECLARE_PROP_UPDATE_END() // InitialScoreValue
+	
+	DECLARE_PROP_UPDATE("LoseMessage")
+		loseMessage = GET_STRING_CONST();
+	DECLARE_PROP_UPDATE_END() // LoseMessage
+	
+	DECLARE_PROP_UPDATE("WinMessage")
+		winMessage = GET_STRING_CONST();
+	DECLARE_PROP_UPDATE_END() // WinMessage
+	
+	DECLARE_PROP_UPDATE("TimerUpAction")
+		TimerUpAction = EnumActionType(GET_ENUM());
+	DECLARE_PROP_UPDATE_END() // TimerUpAction
+
+	DECLARE_PROP_UPDATE("TimerAffectsScore")
+		TimerAffectsScore = EnumAffectType(GET_ENUM());
+	DECLARE_PROP_UPDATE_END() // TimerAffectsScore
+	
+	DECLARE_PROP_UPDATE("HighScoreIsGood")
+		HighScoreIsGood = GET_BOOL() == TRUE;
+	DECLARE_PROP_UPDATE_END() // HighScoreIsGood
+	
+	DECLARE_PROP_UPDATE("RunOnOpen")
+		RunOnOpen = GET_BOOL() == TRUE;
+	DECLARE_PROP_UPDATE_END() // RunOnOpen
+PROP_UPDATE_END(Instance)
 
 void LevelInstance::winCondition()
 {

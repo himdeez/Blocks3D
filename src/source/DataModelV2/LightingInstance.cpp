@@ -40,79 +40,58 @@ G3D::LightingParameters LightingInstance::getLightingParameters()
 	return lighting;
 }
 
-std::vector<PROPGRIDITEM> LightingInstance::getProperties()
-{
-	std::vector<PROPGRIDITEM> properties = Instance::getProperties();
+PROPERTIES_START(LightingInstance, Instance)
 
-	properties.push_back(createPGI("Appearance",
+	DECLARE_COLOR3_PROPERTY(
+		"Appearance",
 		"TopAmbient",
 		"The color of the TopAmbient for 3D Objects",
-		RGB((topAmbient.r*255),(topAmbient.g*255),(topAmbient.b*255)),
-		PIT_COLOR
-		));
+		topAmbient
+	);
 
-	properties.push_back(createPGI("Appearance",
+	DECLARE_COLOR3_PROPERTY(
+		"Appearance",
 		"BottomAmbient",
 		"The color of the BottomAmbient for 3D Objects",
-		RGB((bottomAmbient.r*255),(bottomAmbient.g*255),(bottomAmbient.b*255)),
-		PIT_COLOR
-		));
+		bottomAmbient
+	);
 
-	properties.push_back(createPGI("Appearance",
+	DECLARE_COLOR3_PROPERTY(
+		"Appearance",
 		"SpotLight",
 		"The color of the SpotLight",
-		RGB((spotLight.r*255),(spotLight.g*255),(spotLight.b*255)),
-		PIT_COLOR
-		));
+		spotLight
+	);
 
-	properties.push_back(createPGI("Appearance",
+	DECLARE_COLOR3_PROPERTY(
+		"Appearance",
 		"ClearColor",
 		"",
-		RGB((clearColor.r*255),(clearColor.g*255),(clearColor.b*255)),
-		PIT_COLOR
-		));
-	return properties;
-}
-
-
-void LightingInstance::PropUpdate(LPPROPGRIDITEM &item)
-{
-	if(strcmp(item->lpszPropName, "TopAmbient") == 0)
-	{
-		topAmbient = Color3(
-			GetRValue(item->lpCurValue)/255.0F,
-			GetGValue(item->lpCurValue)/255.0F,
-			GetBValue(item->lpCurValue)/255.0F
-		);
-	}
-	if(strcmp(item->lpszPropName, "BottomAmbient") == 0)
-	{
-		bottomAmbient = Color3(
-			GetRValue(item->lpCurValue)/255.0F,
-			GetGValue(item->lpCurValue)/255.0F,
-			GetBValue(item->lpCurValue)/255.0F
-		);
-	}
-	if(strcmp(item->lpszPropName, "SpotLight") == 0)
-	{
-		spotLight = Color3(
-			GetRValue(item->lpCurValue)/255.0F,
-			GetGValue(item->lpCurValue)/255.0F,
-			GetBValue(item->lpCurValue)/255.0F
-		);
-	}
-	if(strcmp(item->lpszPropName, "ClearColor") == 0)
-	{
-		clearColor = Color3(
-			GetRValue(item->lpCurValue)/255.0F,
-			GetGValue(item->lpCurValue)/255.0F,
-			GetBValue(item->lpCurValue)/255.0F
-		);
-	}
+		clearColor
+	);
 	
-	else
-		Instance::PropUpdate(item);
-}
+PROPERTIES_END()
+
+
+PROP_UPDATE_START(LightingInstance)
+	
+	DECLARE_PROP_UPDATE("TopAmbient")
+		topAmbient = GET_COLOR3();
+	DECLARE_PROP_UPDATE_END() // BottomAmbient
+	
+	DECLARE_PROP_UPDATE("BottomAmbient")
+		bottomAmbient = GET_COLOR3();
+	DECLARE_PROP_UPDATE_END() // BottomAmbient
+	
+	DECLARE_PROP_UPDATE("SpotLight")
+		spotLight = GET_COLOR3();
+	DECLARE_PROP_UPDATE_END() // SpotLight
+	
+	DECLARE_PROP_UPDATE("ClearColor")
+		clearColor = GET_COLOR3();
+	DECLARE_PROP_UPDATE_END() // ClearColor
+	
+PROP_UPDATE_END(Instance)
 
 
 // Functions

@@ -45,8 +45,8 @@
 # ResEditor files
 *.aps
 
-/Debug
-/Release
+/build/Debug
+/build/Release
 stdout.txt
 log.txt
 *.suo

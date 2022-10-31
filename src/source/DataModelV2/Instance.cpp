@@ -56,29 +56,22 @@ PROPGRIDITEM Instance::createPGI(LPSTR catalog, LPSTR propName, LPSTR propDesc, 
 	return pItem;
 }
 
-void Instance::PropUpdate(LPPROPGRIDITEM &item)
-{
-	if(strcmp(item->lpszPropName, "Name") == 0)
-	{
-		name = (LPSTR)item->lpCurValue;
-	}
-}
+PROP_UPDATE_START(Instance)
+	DECLARE_PROP_UPDATE("Name")
+		name = GET_STRING_CONST();
+	DECLARE_PROP_UPDATE_END() // Name
+PROP_UPDATE_END_NO_BASECLASS()
 
-std::vector<PROPGRIDITEM> Instance::getProperties()
-{
-	std::vector<PROPGRIDITEM> properties;
+PROPERTIES_START_NO_BASECLASS(Instance)
 	
-	
-	properties.push_back(createPGI(
+	DECLARE_STRING_PROPERTY(
 		"Properties",
 		"Name",
 		"The name of this instance",
-		(LPARAM)name.c_str(),
-		PIT_EDIT
-		));
-	return properties;
-}
-
+		name.c_str()
+	)
+	
+PROPERTIES_END()
 
 
 Instance::~Instance(void)

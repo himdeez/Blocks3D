@@ -588,24 +588,21 @@ void PartInstance::onTouch()
 	}
 }
 
-void PartInstance::PropUpdate(LPPROPGRIDITEM &item)
-{
+PROP_UPDATE_START(PartInstance)
 	setChanged();
-	if(strcmp(item->lpszPropName, "Color3") == 0)
-	{
-		color = Color3(
-			GetRValue(item->lpCurValue)/255.0F,
-			GetGValue(item->lpCurValue)/255.0F,
-			GetBValue(item->lpCurValue)/255.0F
-		);
-	}
-	else if(strcmp(item->lpszPropName, "Anchored") == 0)
-	{
+
+	DECLARE_PROP_UPDATE("Color3")
+		color = GET_COLOR3();
+	DECLARE_PROP_UPDATE_END() // Color3
+
+
+	DECLARE_PROP_UPDATE("Anchored")
 		setAnchored(item->lpCurValue == TRUE);
-	}
-	else if(strcmp(item->lpszPropName, "Offset") == 0)
-	{
-		std::string str = (LPTSTR)item->lpCurValue;
+	DECLARE_PROP_UPDATE_END() // Anchored
+
+
+	DECLARE_PROP_UPDATE("Offset")
+		std::string str = GET_STRING();
 		std::vector<float> vect;
 		std::stringstream ss(str);
 		float i;
@@ -623,11 +620,11 @@ void PartInstance::PropUpdate(LPPROPGRIDITEM &item)
 			Vector3 pos(vect.at(0),vect.at(1),vect.at(2));
 			setPosition(pos);
 		}
-	}
+	DECLARE_PROP_UPDATE_END() // Offset
 
-	else if(strcmp(item->lpszPropName, "Size") == 0)
-	{
-		std::string str = (LPTSTR)item->lpCurValue;
+
+	DECLARE_PROP_UPDATE("Size")
+		std::string str = GET_STRING();
 		std::vector<float> vect;
 		std::stringstream ss(str);
 		float i;
@@ -645,111 +642,126 @@ void PartInstance::PropUpdate(LPPROPGRIDITEM &item)
 			Vector3 size(vect.at(0),vect.at(1),vect.at(2));
 			setSize(size);
 		}
-	}
-	else if(strcmp(item->lpszPropName, "Shape") == 0)
-	{
+	DECLARE_PROP_UPDATE_END() // Size
+
+
+	DECLARE_PROP_UPDATE("Shape")
 		printf("%s", enumStr(strEnum((TCHAR*)item->lpCurValue)));
 		setShape(strEnum((TCHAR*)item->lpCurValue));
-	}
-	else if(strcmp(item->lpszPropName, "Action") == 0)
-	{
+	DECLARE_PROP_UPDATE_END() // Shape
+
+
+	DECLARE_PROP_UPDATE("Action")
 		OnTouchAction = EnumOnTouchActionType((TCHAR*)item->lpCurValue);
-	}
-	else if (strcmp(item->lpszPropName, "Sound") == 0)
-	{
+	DECLARE_PROP_UPDATE_END() // Action
+
+
+	DECLARE_PROP_UPDATE("Sound")
 		OnTouchSound = EnumOnTouchSoundType((TCHAR*)item->lpCurValue);
-	}
-	else if (strcmp(item->lpszPropName, "ChangeScore") == 0)
-	{
+	DECLARE_PROP_UPDATE_END() // Sound
+
+
+	DECLARE_PROP_UPDATE("ChangeScore")
 		changeScore = atoi((LPSTR)item->lpCurValue);
-	}
-	else if (strcmp(item->lpszPropName, "ChangeTimer") == 0)
-	{
+	DECLARE_PROP_UPDATE_END() // ChangeScore
+
+
+	DECLARE_PROP_UPDATE("ChangeTimer")
 		changeTimer = atof((LPSTR)item->lpCurValue);
-	}
-	else if (strcmp(item->lpszPropName, "SingleShot") == 0)
-	{
+	DECLARE_PROP_UPDATE_END() // ChangeTimer
+
+
+	DECLARE_PROP_UPDATE("SingleShot")
 		singleShot = item->lpCurValue == TRUE;
-	}
-	else PVInstance::PropUpdate(item);
-}
+	DECLARE_PROP_UPDATE_END() // SingleShot
+
+PROP_UPDATE_END(PVInstance)
 
 // This needs to be changed, buffer size of 12 is way too small
 // Crash occurs if you put a huge number in
 char changeTimerTxt[12];
 char changeScoreTxt[12];
-std::vector<PROPGRIDITEM> PartInstance::getProperties()
-{
-	std::vector<PROPGRIDITEM> properties = PVInstance::getProperties();
+PROPERTIES_START(PartInstance, PVInstance)
 
-
-	properties.push_back(createPGI("Properties",
+	DECLARE_COLOR3_PROPERTY(
+		"Properties",
 		"Color3",
 		"The color of the selected part",
-		RGB((color.r*255),(color.g*255),(color.b*255)),
-		PIT_COLOR
-		));
-	properties.push_back(createPGI("Item",
+		color
+	);
+	
+	DECLARE_BOOL_PROPERTY(
+		"Item",
 		"Anchored",
 		"Whether the block can move or not",
-		(LPARAM)anchored,
-		PIT_CHECK
-		));
+		anchored
+	)
+	
 	sprintf_s(pto, "%g, %g, %g", position.x, position.y, position.z);
-	properties.push_back(createPGI("Item",
+	
+	DECLARE_VECTOR3_PROPERTY(
+		"Item",
 		"Offset",
 		"The position of the object in the workspace",
-		(LPARAM)pto,
-		PIT_EDIT
-		));
+		pto
+	)
+	
 	sprintf_s(pto2, "%g, %g, %g", size.x, size.y, size.z);
-	properties.push_back(createPGI("Item",
+	
+	DECLARE_VECTOR3_PROPERTY(
+		"Item",
 		"Size",
 		"The size of the object in the workspace",
-		(LPARAM)pto2,
-		PIT_EDIT
-		));
-	properties.push_back(createPGI("Item",
+		pto2
+	)
+	
+	DECLARE_ENUM_PROPERTY(
+		"Item",
 		"Shape",
 		"The shape of the object in the workspace",
-		(LPARAM)enumStr(shape),
-		PIT_COMBO,
-		TEXT("Ball\0Block\0Cylinder\0")
-		));
-	properties.push_back(createPGI("OnTouch",
+		enumStr(shape),
+		"Ball\0Block\0Cylinder\0"
+	);
+	
+	DECLARE_ENUM_PROPERTY(
+		"OnTouch",
 		"Action",
 		"What action is taken when touched",
-		(LPARAM)strActionType(OnTouchAction),
-		PIT_COMBO,
-		TEXT("Nothing\0Pause\0Lose\0Draw\0Win\0")
-		));
-	properties.push_back(createPGI("OnTouch",
+		strActionType(OnTouchAction),
+		"Nothing\0Pause\0Lose\0Draw\0Win\0"
+	);
+	
+	DECLARE_ENUM_PROPERTY(
+		"OnTouch",
 		"Sound",
 		"What sound plays when touched",
-		(LPARAM)strSoundType(OnTouchSound),
-		PIT_COMBO,
-		TEXT("NoSound\0Victory\0Boing\0Break\0Snap\0Bomb\0Splat\0Page\0Ping\0Swoosh\0")
-		));
+		strSoundType(OnTouchSound),
+		"NoSound\0Victory\0Boing\0Break\0Snap\0Bomb\0Splat\0Page\0Ping\0Swoosh\0"
+	);
 
-		sprintf_s(changeScoreTxt, "%d", changeScore);
-		sprintf_s(changeTimerTxt, "%g", changeTimer);
-	properties.push_back(createPGI("OnTouch",
+	sprintf_s(changeScoreTxt, "%d", changeScore);
+	sprintf_s(changeTimerTxt, "%g", changeTimer);
+	
+	DECLARE_STRING_PROPERTY(
+		"OnTouch",
 		"ChangeScore",
 		"How the score is affected when touched",
-		(LPARAM)changeScoreTxt,
-		PIT_EDIT));
-	properties.push_back(createPGI("OnTouch",
+		changeScoreTxt
+	);
+	
+	DECLARE_STRING_PROPERTY(
+		"OnTouch",
 		"ChangeTimer",
 		"How the timer is affected when touched",
-		(LPARAM)changeTimerTxt,
-		PIT_EDIT));
-	properties.push_back(createPGI("OnTouch",
+		changeTimerTxt
+	);
+	
+	DECLARE_BOOL_PROPERTY(
+		"OnTouch",
 		"SingleShot",
 		"Whether or not Action happens only once",
-		(LPARAM)singleShot,
-		PIT_CHECK
-		));
-	return properties;
-}
-
+		singleShot
+	);
+	
+PROPERTIES_END()
 

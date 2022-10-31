@@ -64,45 +64,44 @@ static Enum::Controller::Value strEnum(TCHAR * tval)
 
 
 
-std::vector<PROPGRIDITEM> PVInstance::getProperties()
-{
-	std::vector<PROPGRIDITEM> properties = Instance::getProperties();
-	properties.push_back(createPGI(
+PROPERTIES_START(PVInstance, Instance)
+	
+	DECLARE_BOOL_PROPERTY(
 		"Item",
 		"NameShown",
 		"This chooses whether the item name is shown",
-		nameShown,
-		PIT_CHECK));
-	properties.push_back(createPGI(
+		nameShown
+	);
+	
+	DECLARE_BOOL_PROPERTY(
 		"Item",
 		"ControllerFlagShown",
 		"This chooses whether the item's ControllerFlag is shown",
-		controllerFlagShown,
-		PIT_CHECK));
-	properties.push_back(createPGI(
+		controllerFlagShown
+	);
+	
+	DECLARE_ENUM_PROPERTY(
 		"Behaviour",
 		"Controller",
 		"This chooses what type of controller is used",
-		(LPARAM)enumStr(controller),
-		PIT_COMBO,
-		TEXT("None\0KeyboardRight\0KeyboardLeft\0Joypad1\0Joypad2\0Chase\0Flee")
-		));
+		enumStr(controller),
+		"None\0KeyboardRight\0KeyboardLeft\0Joypad1\0Joypad2\0Chase\0Flee"
+	)
 
-	return properties;
-}
-void PVInstance::PropUpdate(LPPROPGRIDITEM &pItem)
-{
-	if(strcmp(pItem->lpszPropName, "NameShown") == 0)
-	{
-		nameShown = pItem->lpCurValue == TRUE;
-	}
-	if(strcmp(pItem->lpszPropName, "ControllerFlagShown") == 0)
-	{
-		controllerFlagShown = pItem->lpCurValue == TRUE;
-	}
-	if(strcmp(pItem->lpszPropName, "Controller") == 0)
-	{
-		controller = strEnum((TCHAR *)pItem->lpCurValue);
-	}
-	else Instance::PropUpdate(pItem);
-}
+PROPERTIES_END()
+
+PROP_UPDATE_START(PVInstance)
+
+	DECLARE_PROP_UPDATE("NameShown")
+		nameShown = GET_VALUE() == TRUE;
+	DECLARE_PROP_UPDATE_END() // NameShown
+	
+	DECLARE_PROP_UPDATE("ControllerFlagShown")
+		controllerFlagShown = GET_VALUE() == TRUE;
+	DECLARE_PROP_UPDATE_END() // ControllerFlagShown
+	
+	DECLARE_PROP_UPDATE("Controller")
+		controller = strEnum(GET_ENUM());
+	DECLARE_PROP_UPDATE_END() // Controller
+	
+PROP_UPDATE_END(Instance)

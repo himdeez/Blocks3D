@@ -22,15 +22,11 @@ GroupInstance::~GroupInstance(void)
 {
 }
 
-std::vector<PROPGRIDITEM> GroupInstance::getProperties()
-{
-	std::vector<PROPGRIDITEM> properties = PVInstance::getProperties();
-	return properties;
-}
-void GroupInstance::PropUpdate(LPPROPGRIDITEM &pItem)
-{
-	PVInstance::PropUpdate(pItem);
-}
+PROPERTIES_START(GroupInstance, PVInstance)
+PROPERTIES_END()
+
+PROP_UPDATE_START(GroupInstance)
+PROP_UPDATE_END(PVInstance)
 
 std::vector<Instance *> GroupInstance::unGroup()
 {
