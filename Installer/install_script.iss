@@ -1,5 +1,5 @@
 ;InnoSetupVersion=5.4.3
-#define AppVer GetFileVersion('..\Blocks3D.exe')
+#define AppVer GetFileVersion('..\build\Blocks3D.exe')
 
 [Setup]
 AppName=Blocks3D
@@ -22,9 +22,9 @@ Type: filesandordirs; Name: "{app}"
 [Files]
 Source: "Redist\vcredist_x86.exe"; DestDir: "{tmp}"; Flags: ignoreversion 
 ;Source: "Redist\vcredist_x64.exe"; DestDir: "{tmp}"; Check: "IsWin64"; Flags: ignoreversion 
-Source: "..\content\*"; DestDir: "{app}\content"; Flags: ignoreversion recursesubdirs
-Source: "..\SDL.DLL"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
-Source: "..\Blocks3D.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+Source: "..\build\content\*"; DestDir: "{app}\content"; Flags: ignoreversion recursesubdirs
+Source: "..\build\SDL.DLL"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+Source: "..\build\Blocks3D.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 
 [Registry]
 

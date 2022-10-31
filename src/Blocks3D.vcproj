@@ -16,8 +16,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
+			OutputDirectory=".\..\..\build\Release"
+			IntermediateDirectory=".\..\..\build\Release"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -43,7 +43,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Release/Blocks3D.tlb"
+				TypeLibraryName=".\..\build\Release/Blocks3D.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -55,14 +55,14 @@
 				OmitFramePointers="true"
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="&quot;.\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				PrecompiledHeaderFile=".\Release/Blocks3D.pch"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
+				PrecompiledHeaderFile=".\..\build\Release/Blocks3D.pch"
+				AssemblerListingLocation=".\..\build\Release/"
+				ObjectFile=".\..\build\Release/"
+				ProgramDataBaseFileName=".\..\build\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>
@@ -80,10 +80,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Advapi32.lib Comctl32.lib Comdlg32.lib Shell32.lib ode.lib Ole32.lib"
-				OutputFile="./Blocks3D.exe"
+				OutputFile=".\..\build\Blocks3D.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\Release/Blocks3D.pdb"
+				ProgramDatabaseFile=".\..\build\Release/Blocks3D.pdb"
 				SubSystem="2"
 				StackReserveSize="16777216"
 				OptimizeReferences="2"
@@ -104,7 +104,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Release/Blocks3D.bsc"
+				OutputFile=".\..\build\Release/Blocks3D.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -121,8 +121,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\Debug"
-			IntermediateDirectory=".\Debug"
+			OutputDirectory=".\..\build\Debug"
+			IntermediateDirectory=".\..\build\Debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -148,22 +148,22 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Debug/Blocks3D.tlb"
+				TypeLibraryName=".\..\build\Debug/Blocks3D.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;C:\libraries\ode-0.5\include\drawstuff&quot;;.\include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="false"
-				PrecompiledHeaderFile=".\Debug/Blocks3D.pch"
-				AssemblerListingLocation=".\Debug/"
-				ObjectFile=".\Debug/"
-				ProgramDataBaseFileName=".\Debug/"
+				PrecompiledHeaderFile=".\..\build\Debug/Blocks3D.pch"
+				AssemblerListingLocation=".\..\build\Debug/"
+				ObjectFile=".\..\build\Debug/"
+				ProgramDataBaseFileName=".\..\build\Debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -182,11 +182,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Advapi32.lib UxTheme.lib Comctl32.lib Comdlg32.lib Shell32.lib Urlmon.lib ole32.lib oleaut32.lib uuid.lib oded.lib"
-				OutputFile="./Blocks3D-Debug.exe"
+				OutputFile=".\..\build\Blocks3D-Debug.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/Blocks3D.pdb"
+				ProgramDatabaseFile=".\..\build\Debug/Blocks3D.pdb"
 				SubSystem="1"
 				StackReserveSize="16777216"
 				TargetMachine="1"
@@ -203,7 +203,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Debug/Blocks3D.bsc"
+				OutputFile=".\..\build\Debug/Blocks3D.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -522,8 +522,26 @@
 					>
 				</File>
 				<File
-					RelativePath=".\ThumbnailGeneratorInstance.cpp"
+					RelativePath=".\source\DataModelV2\ThumbnailGeneratorInstance.cpp"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\source\DataModelV2\WorkspaceInstance.cpp"
